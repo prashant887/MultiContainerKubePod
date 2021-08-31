@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-mul-con
+  namespace: demo-namespace
+spec:
+  selector:
+    matchLabels:
+      app: python-mul-con
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: python-mul-con
+    spec:
+      volumes:
+        - name: log-path
+          hostPath:
+            path: /Users/pl465j/projects/MultiContainerKubePod/log
+      containers:
+      - name: pyapi
+        image: pyapi:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+      - name: pyapicon
+        image: pyapicon:latest
+        imagePullPolicy: Never
+        volumeMounts:
+          - name: log-path
+            mountPath: /log/
